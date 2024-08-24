@@ -1,61 +1,47 @@
 import telebot
 from telebot import types
 
-# Токен, который ты получил от BotFather
-TOKEN = '6939538078:AAFA7GJKasEi7VltqYXGPtCtMXIQr6E3P8A'
+# Вставь сюда свой токен
+TOKEN = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 
-# Создаем экземпляр бота
 bot = telebot.TeleBot(TOKEN)
 
 
 # Обработчик команды /start
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    # Создаем клавиатуру
-    markup = types.ReplyKeyboardMarkup(row_width=3)
+    # Создаем инлайн-клавиатуру
+    markup = types.InlineKeyboardMarkup(row_width=3)
 
-    # Создаем кнопки
-    button1 = types.KeyboardButton('Button 1')
-    button2 = types.KeyboardButton('Button 2')
-    button3 = types.KeyboardButton('Button 3')
-    button4 = types.KeyboardButton('Button 4')
-    button5 = types.KeyboardButton('Button 5')
-    button6 = types.KeyboardButton('Button 6')
-    button7 = types.KeyboardButton('Button 7')
-    button8 = types.KeyboardButton('Button 8')
-    button9 = types.KeyboardButton('Button 9')
+    # Создаем кнопки с URL
+    button1 = types.InlineKeyboardButton('Google', url='https://www.google.com')
+    button2 = types.InlineKeyboardButton('Yandex', url='https://www.yandex.com')
+    button3 = types.InlineKeyboardButton('Bing', url='https://www.bing.com')
+    button4 = types.InlineKeyboardButton('Yahoo', url='https://www.yahoo.com')
+    button5 = types.InlineKeyboardButton('DuckDuckGo', url='https://www.duckduckgo.com')
+    button6 = types.InlineKeyboardButton('Baidu', url='https://www.baidu.com')
+    button7 = types.InlineKeyboardButton('Ask', url='https://www.ask.com')
+    button8 = types.InlineKeyboardButton('AOL', url='https://search.aol.com')
+    button9 = types.InlineKeyboardButton('WolframAlpha', url='https://www.wolframalpha.com')
+    button10 = types.InlineKeyboardButton('StartPage', url='https://www.startpage.com')
+    button11 = types.InlineKeyboardButton('Qwant', url='https://www.qwant.com')
+    button12 = types.InlineKeyboardButton('Swisscows', url='https://swisscows.com')
+    button13 = types.InlineKeyboardButton('Ecosia', url='https://www.ecosia.org')
+    button14 = types.InlineKeyboardButton('Mojeek', url='https://www.mojeek.com')
+    button15 = types.InlineKeyboardButton('MetaGer', url='https://www.metager.de')
+    button16 = types.InlineKeyboardButton('Dogpile', url='https://www.dogpile.com')
+    button17 = types.InlineKeyboardButton('Lukol', url='https://www.lukol.com')
+    button18 = types.InlineKeyboardButton('Gibiru', url='https://gibiru.com')
+    button19 = types.InlineKeyboardButton('Searx', url='https://searx.me')
+    button20 = types.InlineKeyboardButton('Gigablast', url='https://www.gigablast.com')
 
     # Добавляем кнопки в клавиатуру
-    markup.add(button1, button2, button3, button4, button5, button6, button7, button8, button9)
+    markup.add(button1, button2, button3, button4, button5, button6, button7, button8, button9, button10)
+    markup.add(button11, button12, button13, button14, button15, button16, button17, button18, button19, button20)
 
-    # Отправляем сообщение с клавиатурой
-    bot.send_message(message.chat.id, "Welcome! Choose an option:", reply_markup=markup)
+    # Отправляем сообщение с инлайн-клавиатурой
+    bot.send_message(message.chat.id, "Choose a search engine:", reply_markup=markup)
 
-
-# Обработчик текстовых сообщений
-@bot.message_handler(func=lambda message: True)
-def echo_all(message):
-    # Проверяем, какая кнопка была нажата и отвечаем соответствующим сообщением
-    if message.text == 'Button 1':
-        bot.reply_to(message, "You pressed Button 1!")
-    elif message.text == 'Button 2':
-        bot.reply_to(message, "You pressed Button 2!")
-    elif message.text == 'Button 3':
-        bot.reply_to(message, "You pressed Button 3!")
-    elif message.text == 'Button 4':
-        bot.reply_to(message, "You pressed Button 4!")
-    elif message.text == 'Button 5':
-        bot.reply_to(message, "You pressed Button 5!")
-    elif message.text == 'Button 6':
-        bot.reply_to(message, "You pressed Button 6!")
-    elif message.text == 'Button 7':
-        bot.reply_to(message, "You pressed Button 7!")
-    elif message.text == 'Button 8':
-        bot.reply_to(message, "You pressed Button 8!")
-    elif message.text == 'Button 9':
-        bot.reply_to(message, "You pressed Button 9!")
-    else:
-        bot.reply_to(message, "Please choose an option from the keyboard.")
 
 # Запуск бота
 bot.polling()
