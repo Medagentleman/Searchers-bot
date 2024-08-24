@@ -1,46 +1,71 @@
 import telebot
 from telebot import types
+import logging
 
 # Вставь сюда свой токен
-TOKEN = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+TOKEN = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 
 bot = telebot.TeleBot(TOKEN)
+
+# Настройка логирования
+logging.basicConfig(filename='bot_activity.log', level=logging.INFO, format='%(asctime)s - %(message)s')
+
+
+# Функция для логирования информации о пользователе
+def log_user_action(user, action):
+    user_info = f"User ID: {user.id}, Name: {user.first_name}, Last Name: {user.last_name}, Username: @{user.username}, Action: {action}"
+    logging.info(user_info)
 
 
 # Обработчик команды /start
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    # Создаем инлайн-клавиатуру
-    markup = types.InlineKeyboardMarkup(row_width=3)
+    log_user_action(message.from_user, 'Started the bot')
 
-    # Создаем кнопки с URL
-    button1 = types.InlineKeyboardButton('Google', url='https://www.google.com')
-    button2 = types.InlineKeyboardButton('Yandex', url='https://www.yandex.com')
-    button3 = types.InlineKeyboardButton('Bing', url='https://www.bing.com')
-    button4 = types.InlineKeyboardButton('Yahoo', url='https://www.yahoo.com')
-    button5 = types.InlineKeyboardButton('DuckDuckGo', url='https://www.duckduckgo.com')
-    button6 = types.InlineKeyboardButton('Baidu', url='https://www.baidu.com')
-    button7 = types.InlineKeyboardButton('Ask', url='https://www.ask.com')
-    button8 = types.InlineKeyboardButton('AOL', url='https://search.aol.com')
-    button9 = types.InlineKeyboardButton('WolframAlpha', url='https://www.wolframalpha.com')
-    button10 = types.InlineKeyboardButton('StartPage', url='https://www.startpage.com')
-    button11 = types.InlineKeyboardButton('Qwant', url='https://www.qwant.com')
-    button12 = types.InlineKeyboardButton('Swisscows', url='https://swisscows.com')
-    button13 = types.InlineKeyboardButton('Ecosia', url='https://www.ecosia.org')
-    button14 = types.InlineKeyboardButton('Mojeek', url='https://www.mojeek.com')
-    button15 = types.InlineKeyboardButton('MetaGer', url='https://www.metager.de')
-    button16 = types.InlineKeyboardButton('Dogpile', url='https://www.dogpile.com')
-    button17 = types.InlineKeyboardButton('Lukol', url='https://www.lukol.com')
-    button18 = types.InlineKeyboardButton('Gibiru', url='https://gibiru.com')
-    button19 = types.InlineKeyboardButton('Searx', url='https://searx.me')
-    button20 = types.InlineKeyboardButton('Gigablast', url='https://www.gigablast.com')
+    # Создаем инлайн-клавиатуру
+    markup = types.InlineKeyboardMarkup(row_width=4)
+
+    # Создаем 20 кнопок с callback_data, содержащими поисковые ссылки
+    buttons = [
+        types.InlineKeyboardButton('Google', callback_data='https://www.google.com'),
+        types.InlineKeyboardButton('Yandex', callback_data='https://www.yandex.com'),
+        types.InlineKeyboardButton('Bing', callback_data='https://www.bing.com'),
+        types.InlineKeyboardButton('Yahoo', callback_data='https://www.yahoo.com'),
+        types.InlineKeyboardButton('DuckDuckGo', callback_data='https://www.duckduckgo.com'),
+        types.InlineKeyboardButton('Baidu', callback_data='https://www.baidu.com'),
+        types.InlineKeyboardButton('Ask', callback_data='https://www.ask.com'),
+        types.InlineKeyboardButton('AOL', callback_data='https://search.aol.com'),
+        types.InlineKeyboardButton('WolframAlpha', callback_data='https://www.wolframalpha.com'),
+        types.InlineKeyboardButton('Ecosia', callback_data='https://www.ecosia.org'),
+        types.InlineKeyboardButton('StartPage', callback_data='https://www.startpage.com'),
+        types.InlineKeyboardButton('Qwant', callback_data='https://www.qwant.com'),
+        types.InlineKeyboardButton('Gigablast', callback_data='https://www.gigablast.com'),
+        types.InlineKeyboardButton('Lycos', callback_data='https://www.lycos.com'),
+        types.InlineKeyboardButton('Dogpile', callback_data='https://www.dogpile.com'),
+        types.InlineKeyboardButton('WebCrawler', callback_data='https://www.webcrawler.com'),
+        types.InlineKeyboardButton('Swisscows', callback_data='https://swisscows.com'),
+        types.InlineKeyboardButton('MetaGer', callback_data='https://www.metager.de'),
+        types.InlineKeyboardButton('Yippy', callback_data='https://www.yippy.com'),
+        types.InlineKeyboardButton('SearX', callback_data='https://searx.github.io')
+    ]
 
     # Добавляем кнопки в клавиатуру
-    markup.add(button1, button2, button3, button4, button5, button6, button7, button8, button9, button10)
-    markup.add(button11, button12, button13, button14, button15, button16, button17, button18, button19, button20)
+    markup.add(*buttons)
 
     # Отправляем сообщение с инлайн-клавиатурой
     bot.send_message(message.chat.id, "Choose a search engine:", reply_markup=markup)
+
+
+# Обработчик нажатий на инлайн-кнопки
+@bot.callback_query_handler(func=lambda call: True)
+def callback_query(call):
+    log_user_action(call.from_user, f'Clicked on {call.data}')
+
+    # Отправляем пользователю ссылку
+    bot.send_message(call.message.chat.id, f"Here is your link: {call.data}")
+
+    # Ответ на запрос (необязательно, но оставим)
+    bot.answer_callback_query(call.id, f"Opening {call.data}")
 
 
 # Запуск бота
