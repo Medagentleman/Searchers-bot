@@ -3,18 +3,37 @@ from telebot import types
 import logging
 
 # Вставь сюда свой токен
-TOKEN = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+TOKEN = 'XxxxxxxxxxxxxxxxX'
 
 bot = telebot.TeleBot(TOKEN)
 
 # Настройка логирования
-logging.basicConfig(filename='bot_activity.log', level=logging.INFO, format='%(asctime)s - %(message)s')
+logger = logging.getLogger('bot_logger')
+logger.setLevel(logging.INFO)
+
+# Логирование в файл
+file_handler = logging.FileHandler('bot_activity.log')
+file_handler.setLevel(logging.INFO)
+
+# Логирование в консоль
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+
+# Форматирование логов
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
+console_handler.setFormatter(formatter)
+
+# Добавляем обработчики к логгеру
+logger.addHandler(file_handler)
+logger.addHandler(console_handler)
 
 
 # Функция для логирования информации о пользователе
 def log_user_action(user, action):
-    user_info = f"User ID: {user.id}, Name: {user.first_name}, Last Name: {user.last_name}, Username: @{user.username}, Action: {action}"
-    logging.info(user_info)
+    user_info = (f"User ID: {user.id}, Name: {user.first_name}, "
+                 f"Last Name: {user.last_name}, Username: @{user.username}, Action: {action}")
+    logger.info(user_info)
 
 
 # Обработчик команды /start
