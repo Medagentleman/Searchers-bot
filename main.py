@@ -3,7 +3,7 @@ from telebot import types
 import logging
 
 # Вставь сюда свой токен
-TOKEN = 'XxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxX'
+TOKEN = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 
 bot = telebot.TeleBot(TOKEN)
 
